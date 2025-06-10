@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,17 +60,16 @@
                     <span>Home</span>
                 </a>
             </li>
-            
-           {% for page in get_user_navigation() %}
-<li class="sidebar-item">
-    <a href="{{ url_for('main.view_page', page_id=page['id']) }}" class="sidebar-link">
-        <i class="fas fa-chart-line sidebar-icon"></i>
-        <span>{{ page['name'] }}</span>
-    </a>
-</li>
-{% endfor %}
 
-            
+            {% for page in accessible_pages %}
+            <li class="sidebar-item">
+                <a href="{{ url_for('main.view_page', page_id=page.id) }}" class="sidebar-link">
+                    <i class="fas fa-chart-line sidebar-icon"></i>
+                    <span>{{ page.title }}</span>
+                </a>
+            </li>
+            {% endfor %}
+
             {% if session.is_admin %}
             <li class="sidebar-item">
                 <a href="{{ url_for('admin.list_pages') }}" class="sidebar-link">
@@ -104,7 +104,7 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        
+
         {% block content %}{% endblock %}
     </div>
     {% else %}
