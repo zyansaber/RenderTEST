@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Page - PowerBI Portal{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2>Edit Page</h2>
+        <a href="{{ url_for('admin.list_pages') }}" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Pages
+        </a>
+    </div>
+    <div class="card-body">
+        <form action="{{ url_for('admin.edit_page', page_id=page.id) }}" method="post" class="needs-validation">
+            <div class="form-group">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" id="title" name="title" class="form-control" value="{{ page.title }}" required>
+            </div>
+            <div class="form-group">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="3">{{ page.description }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="powerbi_embed_url" class="form-label">PowerBI Embed URL</label>
+                <input type="text" id="powerbi_embed_url" name="powerbi_embed_url" class="form-control" value="{{ page.powerbi_embed_url }}" required>
+            </div>
+            <div class="form-group">
+                <label for="display_order" class="form-label">Display Order</label>
+                <input type="number" id="display_order" name="display_order" class="form-control" value="{{ page.display_order }}">
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox" id="is_active" name="is_active" class="form-check-input" {% if page.is_active %}checked{% endif %}>
+                    <label for="is_active" class="form-check-label">Active</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Update Page</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Permission - PowerBI Portal{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2>Add New Permission</h2>
+        <a href="{{ url_for('admin.list_permissions') }}" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Permissions
+        </a>
+    </div>
+    <div class="card-body">
+        <form action="{{ url_for('admin.create_permission') }}" method="post" class="needs-validation">
+            <div class="form-group">
+                <label for="user_id" class="form-label">User</label>
+                <select id="user_id" name="user_id" class="form-control" required>
+                    <option value="">Select User</option>
+                    {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="page_id" class="form-label">Page</label>
+                <select id="page_id" name="page_id" class="form-control" required>
+                    <option value="">Select Page</option>
+                    {% for page in pages %}
+                    <option value="{{ page.id }}">{{ page.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Save Permission</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

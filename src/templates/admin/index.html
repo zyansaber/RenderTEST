@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - PowerBI Portal{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Admin Dashboard</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Pages</h5>
+                        <p class="card-text">Manage PowerBI report pages and embed URLs</p>
+                        <a href="{{ url_for('admin.list_pages') }}" class="btn btn-primary">Manage Pages</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Users</h5>
+                        <p class="card-text">Manage user accounts and permissions</p>
+                        <a href="{{ url_for('admin.list_users') }}" class="btn btn-primary">Manage Users</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Permissions</h5>
+                        <p class="card-text">Assign page access permissions to users</p>
+                        <a href="{{ url_for('admin.list_permissions') }}" class="btn btn-primary">Manage Permissions</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

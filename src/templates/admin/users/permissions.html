@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}User Permissions - PowerBI Portal{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2>Manage Permissions for {{ user.username }}</h2>
+        <a href="{{ url_for('admin.list_users') }}" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Users
+        </a>
+    </div>
+    <div class="card-body">
+        <form action="{{ url_for('admin.manage_user_permissions', user_id=user.id) }}" method="post">
+            <div class="alert alert-info">
+                Select the pages this user can access:
+            </div>
+            
+            <div class="form-group">
+                {% for page in pages %}
+                <div class="form-check">
+                    <input type="checkbox" id="page_{{ page.id }}" name="page_ids" value="{{ page.id }}" class="form-check-input" 
+                        {% if page.id in user_page_ids %}checked{% endif %}>
+                    <label for="page_{{ page.id }}" class="form-check-label">{{ page.title }}</label>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Save Permissions</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
