@@ -31,13 +31,6 @@ def create_app():
     def inject_now():
         return {'now': datetime.utcnow()}
 
-    # Jinja global: navigation
-    @app.context_processor
-    def utility_functions():
-        def get_user_navigation():
-            pages = Page.query.filter_by(is_active=True).order_by(Page.display_order).all()
-            return [{'id': p.id, 'name': p.title} for p in pages]
-        return dict(get_user_navigation=get_user_navigation)
 
     # Register blueprints
     app.register_blueprint(context_bp)
