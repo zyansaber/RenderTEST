@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,14 +9,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div style="text-align: center; margin-top: 40px;">
-        <img src="{{ url_for('static', filename='images/snowy_logo.png') }}" alt="Snowy River Logo" style="height: 80px;">
-    </div>
-
     <div class="login-container">
         <div class="login-card">
-            <div class="login-header">
-                <h2><i class="fas fa-chart-bar mr-2"></i> PowerBI Portal</h2>
+            <div class="login-header" style="text-align: center; padding-top: 20px;">
+                <img src="{{ url_for('static', filename='images/snowy_logo.png') }}" alt="Snowy River Logo" style="height: 60px; margin-bottom: 10px;">
+                <h2 style="margin-top: 10px;">PowerBI Portal</h2>
                 <p>Login to access your reports</p>
             </div>
             <div class="login-body">
@@ -28,7 +26,7 @@
                         {% endfor %}
                     {% endif %}
                 {% endwith %}
-                
+
                 <form action="{{ url_for('auth.login') }}" method="post" class="needs-validation">
                     <div class="form-group">
                         <label for="username" class="form-label">Username</label>
