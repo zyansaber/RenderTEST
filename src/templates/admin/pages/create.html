@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Create a New Page</h2>
-    <form method="post" class="mt-4">
+    <form method="post" enctype="multipart/form-data" class="mt-4">
         <div class="mb-3">
             <label class="form-label">Title</label>
             <input type="text" name="title" class="form-control" required>
@@ -28,8 +28,8 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Image URL</label>
-            <input type="text" name="image_url" class="form-control">
+            <label class="form-label">Upload Image</label>
+            <input type="file" name="image_file" class="form-control">
         </div>
 
         <div class="mb-3">
@@ -38,8 +38,8 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Link Text</label>
-            <input type="text" name="link_text" class="form-control">
+            <label class="form-label">Link Text (Button Name)</label>
+            <input type="text" name="link_text" class="form-control" placeholder="e.g. Click here">
         </div>
 
         <div class="mb-3">
