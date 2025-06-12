@@ -33,6 +33,14 @@ def list_pages():
     pages = Page.query.all()
     return render_template('admin/pages/list.html', pages=pages)
 
+import os
+from flask import request, render_template, redirect, url_for, flash
+from werkzeug.utils import secure_filename
+from src.models.page import Page
+from src.models import db
+
+UPLOAD_FOLDER = 'static/uploads'
+
 @admin_bp.route('/admin/pages/create', methods=['GET', 'POST'])
 def create_page():
     if request.method == 'POST':
@@ -40,15 +48,21 @@ def create_page():
             title = request.form['title']
             type = request.form.get('type', 'powerbi')
             description = request.form.get('description', '')
-            image_url = request.form.get('image_url')
             link_url = request.form.get('link_url')
             link_text = request.form.get('link_text')
             powerbi_embed_url = request.form.get('powerbi_embed_url') if type == 'powerbi' else None
             display_order = int(request.form.get('display_order', 0))
             is_active = 'is_active' in request.form
 
-            from src.models.page import Page
-            from src.models import db
+            # 处理图片上传
+            image_file = request.files.get('image_file')
+            image_url = None
+            if image_file and image_file.filename:
+                filename = secure_filename(image_file.filename)
+                save_path = os.path.join(UPLOAD_FOLDER, filename)
+                os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                image_file.save(save_path)
+                image_url = '/' + save_path.replace('\\\\', '/')
 
             page = Page(
                 title=title,
@@ -74,6 +88,7 @@ def create_page():
             return redirect(url_for('admin.create_page'))
 
     return render_template('admin/pages/create.html')
+
 
 
 @admin_bp.route('/pages/<int:page_id>/edit', methods=['GET', 'POST'])
