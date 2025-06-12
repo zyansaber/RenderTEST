@@ -39,7 +39,7 @@ from werkzeug.utils import secure_filename
 from src.models.page import Page
 from src.models import db
 
-UPLOAD_FOLDER = 'static/uploads'
+UPLOAD_FOLDER = os.path.join('static', 'uploads')  # 定义上传路径
 
 @admin_bp.route('/admin/pages/create', methods=['GET', 'POST'])
 def create_page():
@@ -62,7 +62,7 @@ def create_page():
                 save_path = os.path.join(UPLOAD_FOLDER, filename)
                 os.makedirs(os.path.dirname(save_path), exist_ok=True)
                 image_file.save(save_path)
-                image_url = '/' + save_path.replace('\\\\', '/')
+                image_url = '/' + os.path.join(UPLOAD_FOLDER, filename).replace('\\', '/')
 
             page = Page(
                 title=title,
