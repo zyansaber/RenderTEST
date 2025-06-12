@@ -12,73 +12,73 @@
   {% block extra_css %}{% endblock %}
 </head>
 
-<body>
-  {% if session.user_id %}
-  <!-- ✅ NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-    <div class="container d-flex justify-content-between align-items-center">
-      <a href="{{ url_for('main.index') }}" class="navbar-brand d-flex align-items-center">
-        <img src="{{ url_for('static', filename='images/snowy_logo.png') }}" alt="Snowy River Logo" style="height: 32px; margin-right: 8px;" />
-        <strong>PowerBI Portal</strong>
-      </a>
-
+<body class="bg-light">
+{% if session.user_id %}
+  <!-- ✅ FIXED NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+    <div class="container-fluid px-4">
       <div class="d-flex align-items-center">
+        <a href="{{ url_for('main.index') }}" class="navbar-brand d-flex align-items-center">
+          <img src="{{ url_for('static', filename='images/snowy_logo.png') }}" alt="Snowy River Logo" style="height: 32px;" class="me-2">
+          <span class="fw-bold text-primary">PowerBI Portal</span>
+        </a>
+      </div>
+      <div class="d-flex align-items-center ms-auto">
         {% if session.is_admin %}
         <a href="{{ url_for('admin.index') }}" class="btn btn-outline-secondary btn-sm me-2">Admin</a>
         {% endif %}
-        <span class="me-2">{{ session.username }}</span>
+        <span class="me-2 text-dark fw-semibold">{{ session.username }}</span>
         <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm">Logout</a>
       </div>
     </div>
   </nav>
 
-  <!-- ✅ Page Content -->
+  <!-- ✅ PAGE LAYOUT -->
   <div class="d-flex" style="min-height: 100vh;">
-    <!-- ✅ Sidebar -->
-    <div class="bg-dark text-white p-3" style="min-width: 220px;">
-      <h5 class="text-white mb-3">Navigation</h5>
+    <!-- Sidebar -->
+    <aside class="bg-dark text-white p-3" style="width: 240px;">
       <ul class="nav flex-column">
         <li class="nav-item mb-2">
-          <a class="nav-link text-white" href="{{ url_for('main.index') }}">
+          <a href="{{ url_for('main.index') }}" class="nav-link text-white">
             <i class="fas fa-home me-2"></i> Home
           </a>
         </li>
         {% for page in accessible_pages %}
         <li class="nav-item mb-2">
-          <a class="nav-link text-white" href="{{ url_for('main.view_page', page_id=page.id) }}">
+          <a href="{{ url_for('main.view_page', page_id=page.id) }}" class="nav-link text-white">
             <i class="fas fa-chart-line me-2"></i> {{ page.title }}
           </a>
         </li>
         {% endfor %}
         {% if session.is_admin %}
         <li class="nav-item mt-3 mb-2">
-          <a class="nav-link text-white" href="{{ url_for('admin.list_pages') }}">
+          <a href="{{ url_for('admin.list_pages') }}" class="nav-link text-white">
             <i class="fas fa-file-alt me-2"></i> Pages
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a class="nav-link text-white" href="{{ url_for('admin.list_users') }}">
+          <a href="{{ url_for('admin.list_users') }}" class="nav-link text-white">
             <i class="fas fa-users me-2"></i> Users
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a class="nav-link text-white" href="{{ url_for('admin.list_permissions') }}">
+          <a href="{{ url_for('admin.list_permissions') }}" class="nav-link text-white">
             <i class="fas fa-lock me-2"></i> Permissions
           </a>
         </li>
         {% endif %}
       </ul>
-    </div>
+    </aside>
 
-    <!-- ✅ Main Content -->
-    <main class="flex-fill p-4 bg-light">
+    <!-- Main content -->
+    <main class="flex-grow-1 p-4">
       <div class="container">
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             {% for category, message in messages %}
               <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
                 {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
               </div>
             {% endfor %}
           {% endif %}
@@ -87,16 +87,14 @@
       </div>
     </main>
   </div>
-  {% else %}
+{% else %}
   {% block auth_content %}{% endblock %}
-  {% endif %}
+{% endif %}
 
-  <!-- ✅ Footer -->
-  <footer class="text-center py-3 border-top">
-    <small>&copy; {{ now.year }} PowerBI Portal. All rights reserved.</small>
+  <footer class="text-center py-3 border-top bg-white">
+    <small>&copy; {{ now.year }} PowerBI Portal</small>
   </footer>
 
-  <!-- ✅ Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   {% block extra_js %}{% endblock %}
