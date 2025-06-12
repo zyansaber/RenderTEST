@@ -1,13 +1,13 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, session, g
+from flask import Blueprint, render_template, redirect, url_for, flash, request, session
+from functools import wraps
 from src.models import db
 from src.models.user import User
 from src.models.page import Page
 from src.models.permission import UserPagePermission
-from functools import wraps
 
 main_bp = Blueprint('main', __name__)
 
-# Login required decorator
+# 登录保护装饰器
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -16,25 +16,25 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# Home page
+
+# 首页
 @main_bp.route('/')
 @login_required
 def index():
     return render_template('main/index.html')
 
-# View PowerBI page
+
+# 访问页面（PowerBI / Custom）
 @main_bp.route('/page/<int:page_id>')
 @login_required
 def view_page(page_id):
-    # 获取页面
     page = Page.query.get_or_404(page_id)
 
-    # 权限检查
     user_id = session.get('user_id')
-    is_admin = session.get('is_admin')
+    is_admin = session.get('is_admin', False)
 
+    # 如果不是管理员，检查权限
     if not is_admin:
-        from src.models.permission import UserPagePermission
         permission = UserPagePermission.query.filter_by(
             user_id=user_id,
             page_id=page_id
@@ -50,22 +50,20 @@ def view_page(page_id):
         return render_template('main/view_page.html', page=page)
 
 
-# Get user's accessible pages for navigation
+# 页面导航显示当前用户能看到的页面
 @main_bp.context_processor
 def inject_user_pages():
     if not session.get('user_id'):
-        return {'user_pages': []}
-    
+        return {'accessible_pages': []}
+
     user_id = session.get('user_id')
-    is_admin = session.get('is_admin')
-    
+    is_admin = session.get('is_admin', False)
+
     if is_admin:
-        # Admins can see all pages
         pages = Page.query.filter_by(is_active=True).order_by(Page.display_order).all()
     else:
-        # Regular users can only see pages they have permission for
         permissions = UserPagePermission.query.filter_by(user_id=user_id).all()
         page_ids = [p.page_id for p in permissions]
-        pages = Page.query.filter(Page.id.in_(page_ids), Page.is_active==True).order_by(Page.display_order).all()
-    
-    return {'user_pages': pages}
+        pages = Page.query.filter(Page.id.in_(page_ids), Page.is_active == True).order_by(Page.display_order).all()
+
+    return {'accessible_pages': pages}
