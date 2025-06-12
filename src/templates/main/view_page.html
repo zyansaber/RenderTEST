@@ -1,50 +1,32 @@
 {% extends 'base.html' %}
-
-{% block title %}{{ page.title }}{% endblock %}
-
 {% block content %}
-<div class="container py-4">
+<div class="container-fluid">
     {% if page.type == 'custom' %}
-        <div class="text-center mb-4">
-            <h1 class="display-5 fw-bold">{{ page.title }}</h1>
-        </div>
-
         {% if page.description %}
-        <div class="row justify-content-center mb-4">
-            <div class="col-md-10">
-                <div class="p-3 bg-white border rounded shadow-sm">
-                    {{ page.description | safe }}
-                </div>
+        <div class="mb-3">
+            <div class="card card-body">
+                {{ page.description | safe }}
             </div>
         </div>
         {% endif %}
 
         {% if page.image_url %}
-        <div class="row justify-content-center mb-4">
-            <div class="col-md-10 text-center">
-                <img src="{{ page.image_url }}" alt="Image"
-                     class="img-fluid rounded shadow-sm"
-                     style="max-height: 600px; object-fit: contain;">
-            </div>
+        <div class="text-center mb-3">
+            <img src="{{ page.image_url }}" class="img-fluid rounded shadow-sm" alt="Uploaded Image" style="max-width:1000px;">
         </div>
         {% endif %}
 
         {% if page.link_url %}
         <div class="text-center">
-            <a href="{{ page.link_url }}" target="_blank" class="btn btn-lg btn-success shadow">
-                {{ page.link_text or "Open Link" }}
+            <a href="{{ page.link_url }}" target="_blank" class="btn btn-primary btn-lg">
+                {{ page.link_text or 'Open Link' }}
             </a>
         </div>
         {% endif %}
-
     {% elif page.type == 'powerbi' %}
-        {% if page.powerbi_embed_url %}
-        <div class="ratio ratio-16x9" style="min-height: 80vh;">
-            <iframe class="rounded shadow border" src="{{ page.powerbi_embed_url }}" allowfullscreen></iframe>
+        <div class="ratio ratio-16x9">
+            <iframe src="{{ page.powerbi_embed_url }}" allowfullscreen style="border:0;"></iframe>
         </div>
-        {% else %}
-        <p class="text-muted">No PowerBI URL configured.</p>
-        {% endif %}
     {% endif %}
 </div>
 {% endblock %}
