@@ -1,55 +1,55 @@
 {% extends 'base.html' %}
-{% block title %}Create Page{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
-    <h2>Create a New Page</h2>
-    <form method="post" enctype="multipart/form-data" class="mt-4">
+<div class="container mt-5">
+    <h2>Create New Page</h2>
+    <form method="POST" enctype="multipart/form-data">
         <div class="mb-3">
-            <label class="form-label">Title</label>
-            <input type="text" name="title" class="form-control" required>
+            <label for="title" class="form-label">Page Title</label>
+            <input type="text" name="title" id="title" class="form-control" required>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Page Type</label>
-            <select name="type" class="form-select">
-                <option value="powerbi">PowerBI</option>
+            <label for="type" class="form-label">Page Type</label>
+            <select name="type" id="type" class="form-select">
+                <option value="powerbi">Power BI</option>
                 <option value="custom">Custom</option>
             </select>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">PowerBI Embed URL</label>
-            <input type="text" name="powerbi_embed_url" class="form-control">
+            <label for="description" class="form-label">Description (HTML supported)</label>
+            <textarea name="description" id="description" rows="4" class="form-control"></textarea>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Description</label>
-            <textarea name="description" rows="5" class="form-control" placeholder="Enter HTML or text here..."></textarea>
+            <label for="image_file" class="form-label">Upload Image</label>
+            <input type="file" name="image_file" id="image_file" class="form-control">
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Upload Image</label>
-            <input type="file" name="image_file" class="form-control">
+            <label for="link_url" class="form-label">Link URL</label>
+            <input type="url" name="link_url" id="link_url" class="form-control">
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Link URL</label>
-            <input type="text" name="link_url" class="form-control">
+            <label for="link_text" class="form-label">Link Text</label>
+            <input type="text" name="link_text" id="link_text" class="form-control">
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Link Text (Button Name)</label>
-            <input type="text" name="link_text" class="form-control" placeholder="e.g. Click here">
+            <label for="powerbi_embed_url" class="form-label">Power BI Embed URL</label>
+            <input type="url" name="powerbi_embed_url" id="powerbi_embed_url" class="form-control">
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Display Order</label>
-            <input type="number" name="display_order" class="form-control" value="0">
+            <label for="display_order" class="form-label">Display Order</label>
+            <input type="number" name="display_order" id="display_order" value="0" class="form-control">
         </div>
 
         <div class="form-check mb-3">
-            <input type="checkbox" name="is_active" class="form-check-input" id="activeCheckbox" checked>
-            <label class="form-check-label" for="activeCheckbox">Active</label>
+            <input type="checkbox" name="is_active" id="is_active" class="form-check-input" checked>
+            <label for="is_active" class="form-check-label">Active</label>
         </div>
 
         <button type="submit" class="btn btn-primary">Create Page</button>
