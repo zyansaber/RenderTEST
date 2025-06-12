@@ -1,128 +1,104 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}PowerBI Portal{% endblock %}</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}PowerBI Portal{% endblock %}</title>
 
-    <!-- ✅ 加这一行 Bootstrap 样式 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    {% block extra_css %}{% endblock %}
+  <!-- ✅ Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  {% block extra_css %}{% endblock %}
 </head>
 
 <body>
-    {% if session.user_id %}
-    <!-- Navigation bar -->
-    <nav class="navbar">
-        <div class="d-flex align-items-center">
-            <button id="mobile-menu-toggle" class="btn btn-sm d-md-none mr-2">
-                <i class="fas fa-bars"></i>
-            </button>
-            <a href="{{ url_for('main.index') }}" class="navbar-brand d-flex align-items-center">
-                <img src="{{ url_for('static', filename='images/snowy_logo.png') }}" alt="Snowy River Logo" style="height: 32px; margin-right: 8px;">
-                <span>PowerBI Portal</span>
-            </a>
+  {% if session.user_id %}
+  <!-- ✅ NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container d-flex justify-content-between align-items-center">
+      <a href="{{ url_for('main.index') }}" class="navbar-brand d-flex align-items-center">
+        <img src="{{ url_for('static', filename='images/snowy_logo.png') }}" alt="Snowy River Logo" style="height: 32px; margin-right: 8px;" />
+        <strong>PowerBI Portal</strong>
+      </a>
 
-        </div>
-        <div class="navbar-nav">
-            {% if session.is_admin %}
-            <div class="nav-item">
-                <a href="{{ url_for('admin.index') }}" class="nav-link">
-                    <i class="fas fa-cog"></i>
-                    Admin
-                </a>
-            </div>
-            {% endif %}
-            <div class="nav-item">
-                <a href="{{ url_for('auth.login') }}" class="nav-link">
-                    <i class="fas fa-user"></i>
-                    {{ session.username }}
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="{{ url_for('auth.logout') }}" class="nav-link">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Logout
-                </a>
-            </div>
-        </div>
-    </nav>
+      <div class="d-flex align-items-center">
+        {% if session.is_admin %}
+        <a href="{{ url_for('admin.index') }}" class="btn btn-outline-secondary btn-sm me-2">Admin</a>
+        {% endif %}
+        <span class="me-2">{{ session.username }}</span>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm">Logout</a>
+      </div>
+    </div>
+  </nav>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <button id="sidebar-toggle" class="btn btn-sm">
-                <i class="fas fa-arrows-alt-h"></i>
-            </button>
-        </div>
-        <ul class="sidebar-menu">
-            <li class="sidebar-item">
-                <a href="{{ url_for('main.index') }}" class="sidebar-link">
-                    <i class="fas fa-home sidebar-icon"></i>
-                    <span>Home</span>
-                </a>
-            </li>
-
-            {% for page in accessible_pages %}
-            <li class="sidebar-item">
-                <a href="{{ url_for('main.view_page', page_id=page.id) }}" class="sidebar-link">
-                    <i class="fas fa-chart-line sidebar-icon"></i>
-                    <span>{{ page.title }}</span>
-                </a>
-            </li>
-            {% endfor %}
-
-            {% if session.is_admin %}
-            <li class="sidebar-item">
-                <a href="{{ url_for('admin.list_pages') }}" class="sidebar-link">
-                    <i class="fas fa-file-alt sidebar-icon"></i>
-                    <span>Pages</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="{{ url_for('admin.list_users') }}" class="sidebar-link">
-                    <i class="fas fa-users sidebar-icon"></i>
-                    <span>Users</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="{{ url_for('admin.list_permissions') }}" class="sidebar-link">
-                    <i class="fas fa-lock sidebar-icon"></i>
-                    <span>Permissions</span>
-                </a>
-            </li>
-            {% endif %}
-        </ul>
+  <!-- ✅ Page Content -->
+  <div class="d-flex" style="min-height: 100vh;">
+    <!-- ✅ Sidebar -->
+    <div class="bg-dark text-white p-3" style="min-width: 220px;">
+      <h5 class="text-white mb-3">Navigation</h5>
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2">
+          <a class="nav-link text-white" href="{{ url_for('main.index') }}">
+            <i class="fas fa-home me-2"></i> Home
+          </a>
+        </li>
+        {% for page in accessible_pages %}
+        <li class="nav-item mb-2">
+          <a class="nav-link text-white" href="{{ url_for('main.view_page', page_id=page.id) }}">
+            <i class="fas fa-chart-line me-2"></i> {{ page.title }}
+          </a>
+        </li>
+        {% endfor %}
+        {% if session.is_admin %}
+        <li class="nav-item mt-3 mb-2">
+          <a class="nav-link text-white" href="{{ url_for('admin.list_pages') }}">
+            <i class="fas fa-file-alt me-2"></i> Pages
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a class="nav-link text-white" href="{{ url_for('admin.list_users') }}">
+            <i class="fas fa-users me-2"></i> Users
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a class="nav-link text-white" href="{{ url_for('admin.list_permissions') }}">
+            <i class="fas fa-lock me-2"></i> Permissions
+          </a>
+        </li>
+        {% endif %}
+      </ul>
     </div>
 
-    <!-- Main content area -->
-    <div class="main-content">
+    <!-- ✅ Main Content -->
+    <main class="flex-fill p-4 bg-light">
+      <div class="container">
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
         {% endwith %}
-
         {% block content %}{% endblock %}
-    </div>
-    {% else %}
-        {% block auth_content %}{% endblock %}
-    {% endif %}
+      </div>
+    </main>
+  </div>
+  {% else %}
+  {% block auth_content %}{% endblock %}
+  {% endif %}
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; {{ now.year }} PowerBI Portal. All rights reserved.</p>
-    </footer>
+  <!-- ✅ Footer -->
+  <footer class="text-center py-3 border-top">
+    <small>&copy; {{ now.year }} PowerBI Portal. All rights reserved.</small>
+  </footer>
 
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    {% block extra_js %}{% endblock %}
+  <!-- ✅ Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>
