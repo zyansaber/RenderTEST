@@ -26,24 +26,29 @@ def index():
 @main_bp.route('/page/<int:page_id>')
 @login_required
 def view_page(page_id):
-    # Get the page
+    # 获取页面
     page = Page.query.get_or_404(page_id)
-    
-    # Check if user has permission to view this page
+
+    # 权限检查
     user_id = session.get('user_id')
     is_admin = session.get('is_admin')
-    
+
     if not is_admin:
+        from src.models.permission import UserPagePermission
         permission = UserPagePermission.query.filter_by(
             user_id=user_id,
             page_id=page_id
         ).first()
-        
         if not permission:
             flash('You do not have permission to view this page', 'danger')
             return redirect(url_for('main.index'))
-    
-    return render_template('main/view_page.html', page=page)
+
+    # 根据页面类型选择模板
+    if page.type == 'custom':
+        return render_template('pages/custom.html', page=page)
+    else:
+        return render_template('main/view_page.html', page=page)
+
 
 # Get user's accessible pages for navigation
 @main_bp.context_processor
