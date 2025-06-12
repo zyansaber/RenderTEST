@@ -39,7 +39,8 @@ from werkzeug.utils import secure_filename
 from src.models.page import Page
 from src.models import db
 
-UPLOAD_FOLDER = os.path.join('static', 'uploads')  # 定义上传路径
+# 上传文件保存目录：src/static/uploads
+UPLOAD_FOLDER = os.path.join('src', 'static', 'uploads')
 
 @admin_bp.route('/admin/pages/create', methods=['GET', 'POST'])
 def create_page():
@@ -54,7 +55,7 @@ def create_page():
             display_order = int(request.form.get('display_order', 0))
             is_active = 'is_active' in request.form
 
-            # 处理图片上传
+            # 图片上传处理
             image_file = request.files.get('image_file')
             image_url = None
             if image_file and image_file.filename:
@@ -62,7 +63,7 @@ def create_page():
                 save_path = os.path.join(UPLOAD_FOLDER, filename)
                 os.makedirs(os.path.dirname(save_path), exist_ok=True)
                 image_file.save(save_path)
-                image_url = '/' + os.path.join(UPLOAD_FOLDER, filename).replace('\\', '/')
+                image_url = '/static/uploads/' + filename  # 用于页面展示
 
             page = Page(
                 title=title,
