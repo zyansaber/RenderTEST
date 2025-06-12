@@ -12,16 +12,18 @@
         {% endif %}
 
         {% if page.image_url %}
-        <div class="mb-3">
+        <div class="mb-3 text-center">
             <img src="{{ page.image_url }}" alt="Uploaded image"
-                 style="width: 100%; height: auto; object-fit: contain; border-radius: 8px;">
+                 style="width: 100%; max-width: 1000px; height: auto; display: block; margin: 0 auto; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
         </div>
         {% endif %}
 
         {% if page.link_url %}
-        <a href="{{ page.link_url }}" class="btn btn-primary" target="_blank">
-            {{ page.link_text or 'Open Link' }}
-        </a>
+        <div class="text-center mt-3">
+            <a href="{{ page.link_url }}" class="btn btn-success btn-lg" target="_blank">
+                {{ page.link_text or 'Open Link' }}
+            </a>
+        </div>
         {% endif %}
 
     {% elif page.type == 'powerbi' %}
