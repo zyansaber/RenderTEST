@@ -36,35 +36,42 @@ def list_pages():
 @admin_bp.route('/admin/pages/create', methods=['GET', 'POST'])
 def create_page():
     if request.method == 'POST':
-        title = request.form['title']
-        type = request.form.get('type', 'powerbi')
-        description = request.form.get('description', '')
-        image_url = request.form.get('image_url')
-        link_url = request.form.get('link_url')
-        link_text = request.form.get('link_text')
-        powerbi_embed_url = request.form.get('powerbi_embed_url') if type == 'powerbi' else None
-        display_order = int(request.form.get('display_order', 0))
-        is_active = 'is_active' in request.form
+        try:
+            title = request.form['title']
+            type = request.form.get('type', 'powerbi')
+            description = request.form.get('description', '')
+            image_url = request.form.get('image_url')
+            link_url = request.form.get('link_url')
+            link_text = request.form.get('link_text')
+            powerbi_embed_url = request.form.get('powerbi_embed_url') if type == 'powerbi' else None
+            display_order = int(request.form.get('display_order', 0))
+            is_active = 'is_active' in request.form
 
-        from src.models.page import Page
-        from src.models import db
+            from src.models.page import Page
+            from src.models import db
 
-        page = Page(
-            title=title,
-            type=type,
-            description=description,
-            image_url=image_url,
-            link_url=link_url,
-            link_text=link_text,
-            powerbi_embed_url=powerbi_embed_url,
-            display_order=display_order,
-            is_active=is_active
-        )
+            page = Page(
+                title=title,
+                type=type,
+                description=description,
+                image_url=image_url,
+                link_url=link_url,
+                link_text=link_text,
+                powerbi_embed_url=powerbi_embed_url,
+                display_order=display_order,
+                is_active=is_active
+            )
 
-        db.session.add(page)
-        db.session.commit()
-        flash('Page created successfully', 'success')
-        return redirect(url_for('admin.list_pages'))
+            db.session.add(page)
+            db.session.commit()
+            flash('Page created successfully', 'success')
+            return redirect(url_for('admin.list_pages'))
+
+        except Exception as e:
+            db.session.rollback()
+            flash("Server error: " + str(e), "danger")
+            print("CREATE PAGE ERROR:", e)
+            return redirect(url_for('admin.create_page'))
 
     return render_template('admin/pages/create.html')
 
