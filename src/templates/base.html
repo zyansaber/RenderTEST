@@ -32,8 +32,8 @@
       padding: 2rem;
       background-color: #f8f9fa;
     }
-    .main-content .page-container {
-      max-width: 1200px;
+    .page-container {
+      max-width: 100%;
       margin: 0 auto;
     }
     .navbar .navbar-brand span {
@@ -43,13 +43,37 @@
     .navbar .btn {
       margin-left: 0.5rem;
     }
+    .page-title {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .page-description {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      color: #555;
+    }
+    .page-image {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .page-link {
+      margin-bottom: 2rem;
+    }
+    .powerbi-iframe {
+      width: 100%;
+      height: calc(100vh - 250px);
+      border: none;
+    }
   </style>
   {% block extra_css %}{% endblock %}
 </head>
 
 <body class="bg-light">
-  {% if session.user_id %}
-  <!-- ✅ FIXED NAVBAR -->
+{% if session.user_id %}
   <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm px-4">
     <div class="container-fluid">
       <a href="{{ url_for('main.index') }}" class="navbar-brand d-flex align-items-center">
@@ -66,9 +90,7 @@
     </div>
   </nav>
 
-  <!-- ✅ LAYOUT -->
   <div class="main-layout">
-    <!-- Sidebar -->
     <aside class="sidebar">
       <ul class="nav flex-column">
         <li class="nav-item">
@@ -103,7 +125,6 @@
       </ul>
     </aside>
 
-    <!-- Main content -->
     <main class="main-content">
       <div class="page-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -121,16 +142,16 @@
       </div>
     </main>
   </div>
-  {% else %}
-    {% block auth_content %}{% endblock %}
-  {% endif %}
+{% else %}
+  {% block auth_content %}{% endblock %}
+{% endif %}
 
-  <footer class="text-center py-3 border-top bg-white">
-    <small>&copy; {{ now.year }} PowerBI Portal</small>
-  </footer>
+<footer class="text-center py-3 border-top bg-white">
+  <small>&copy; {{ now.year }} PowerBI Portal</small>
+</footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-  {% block extra_js %}{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_js %}{% endblock %}
 </body>
 </html>
