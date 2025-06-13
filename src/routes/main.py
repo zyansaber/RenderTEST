@@ -60,10 +60,12 @@ def inject_user_pages():
     is_admin = session.get('is_admin', False)
 
     if is_admin:
-        pages = Page.query.filter_by(is_active=True).order_by(Page.display_order).all()
+        pages = Page.query.filter_by(is_active=True) \
+            .order_by(Page.display_order.asc(), Page.title.asc()).all()
     else:
         permissions = UserPagePermission.query.filter_by(user_id=user_id).all()
         page_ids = [p.page_id for p in permissions]
-        pages = Page.query.filter(Page.id.in_(page_ids), Page.is_active == True).order_by(Page.display_order).all()
+        pages = Page.query.filter(Page.id.in_(page_ids), Page.is_active == True) \
+            .order_by(Page.display_order.asc(), Page.title.asc()).all()
 
     return {'accessible_pages': pages}
